@@ -152,6 +152,11 @@ SRC_URI:append:az01 = " file://0014-nvmem-rockchip-add-RK3288-secure-bank-word-r
 # panel showed only noise. Count in the real lane rate when it is higher.
 SRC_URI:append:az01 = " file://0015-drm-bridge-dw-mipi-dsi-count-non-burst-lbcc-in-the-real-lane-rate.patch"
 
+# The SC5000M/SC6000M fans. A microcontroller on UART1 runs them and nothing
+# in-tree speaks its protocol, so without this the fans are never commanded.
+# Untested on hardware; see the patch header.
+SRC_URI:append:az01 = " file://0016-hwmon-add-the-inMusic-AZ01-fan-controller.patch"
+
 # The signed-boot machine needs a kernel FIT, not the zImage-in-rootfs shape
 # the other boards use. Gated internally on the az0x-signed override; a no-op
 # everywhere else. See the include for the FIT shape it emits.
