@@ -76,4 +76,12 @@ AZ0X_DTB_INSTALL:az01-ksrc = ""
 # ask for - the set the vendor rootfs ships in /boot, listed per machine in
 # AZ0X_BOARD_DTBS - or such a unit stops at boot.scr's `|| exit`.
 AZ0X_BOARD_DTBS ?= "${AZ0X_BOARD_DTB}"
+
+# Opt-in: AZ0X_GPU_BOOST = "1" in local.conf adds a 600 MHz GPU step, with a
+# throttle back to 400 MHz under heat, to the RK3288-C trees of a from-source
+# kernel (within Rockchip's rating). AZ0X_GPU_BOOST_PLAIN = "1" extends it to
+# plain RK3288, beyond Rockchip's 500 MHz rating. See
+# recipes-kernel/linux/az01-gpu-boost.inc for the reasoning and the values.
+AZ0X_GPU_BOOST ?= "0"
+AZ0X_GPU_BOOST_PLAIN ?= "0"
 KERNEL_DEVICETREE:az01-ksrc = "${@' '.join('rockchip/%s.dtb' % b for b in d.getVar('AZ0X_BOARD_DTBS').split())}"

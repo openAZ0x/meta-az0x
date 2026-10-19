@@ -157,6 +157,9 @@ SRC_URI:append:az01 = " file://0015-drm-bridge-dw-mipi-dsi-count-non-burst-lbcc-
 # Untested on hardware; see the patch header.
 SRC_URI:append:az01 = " file://0016-hwmon-add-the-inMusic-AZ01-fan-controller.patch"
 
+# Opt-in GPU boost for RK3288-C units; see az01-gpu-boost.inc.
+require az01-gpu-boost.inc
+
 # The signed-boot machine needs a kernel FIT, not the zImage-in-rootfs shape
 # the other boards use. Gated internally on the az0x-signed override; a no-op
 # everywhere else. See the include for the FIT shape it emits.
