@@ -67,4 +67,13 @@ AZ0X_ESSENTIAL_MODULES ?= "kernel-modules"
 # non-boot. Set AZ0X_DTB_INSTALL back to "az01-vendor-devicetree" (and
 # KERNEL_DEVICETREE to "") to fall back to the vendor blobs.
 AZ0X_DTB_INSTALL:az01-ksrc = ""
-KERNEL_DEVICETREE:az01-ksrc = "rockchip/${AZ0X_BOARD_DTB}.dtb"
+#
+# One machine covers several boards, and each board comes in variants. The
+# vendor u-boot (board/inmusic/az01/az01.c) builds the name as
+# rk3288-az01-<board>[-c][-revf].dtb: <board> from its own control device
+# tree, -c when that tree's root is compatible with "rockchip,rk3288-c", -revf
+# from the PCB revision straps. Install every name a unit of this machine can
+# ask for - the set the vendor rootfs ships in /boot, listed per machine in
+# AZ0X_BOARD_DTBS - or such a unit stops at boot.scr's `|| exit`.
+AZ0X_BOARD_DTBS ?= "${AZ0X_BOARD_DTB}"
+KERNEL_DEVICETREE:az01-ksrc = "${@' '.join('rockchip/%s.dtb' % b for b in d.getVar('AZ0X_BOARD_DTBS').split())}"
