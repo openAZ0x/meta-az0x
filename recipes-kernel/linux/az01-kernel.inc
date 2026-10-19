@@ -157,8 +157,23 @@ SRC_URI:append:az01 = " file://0015-drm-bridge-dw-mipi-dsi-count-non-burst-lbcc-
 # Untested on hardware; see the patch header.
 SRC_URI:append:az01 = " file://0016-hwmon-add-the-inMusic-AZ01-fan-controller.patch"
 
-# Opt-in GPU boost for RK3288-C units; see az01-gpu-boost.inc.
+# Opt-in clock boosts, applied to the built board trees; see
+# az01-gpu-boost.inc and az01-cpu-boost.inc.
 require az01-gpu-boost.inc
+require az01-cpu-boost.inc
+
+# make treats an existing .dtb as up to date, so a tree boosted by an earlier
+# build would survive switching a boost off. Remove the board trees before
+# every compile so they are always rebuilt from source.
+do_compile[prefuncs] += "az0x_boost_fresh_dtbs"
+python az0x_boost_fresh_dtbs() {
+    import os
+    dtsdir = os.path.join(d.getVar('B'), 'arch', d.getVar('ARCH'), 'boot', 'dts', 'rockchip')
+    for board in (d.getVar('AZ0X_BOARD_DTBS') or '').split():
+        dtb = os.path.join(dtsdir, board + '.dtb')
+        if os.path.exists(dtb):
+            os.remove(dtb)
+}
 
 # The signed-boot machine needs a kernel FIT, not the zImage-in-rootfs shape
 # the other boards use. Gated internally on the az0x-signed override; a no-op

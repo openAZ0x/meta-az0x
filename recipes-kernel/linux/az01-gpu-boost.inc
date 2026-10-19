@@ -40,19 +40,6 @@ do_compile[depends] += "${@'dtc-native:do_populate_sysroot' if d.getVar('AZ0X_GP
 do_compile[vardeps] += "AZ0X_GPU_BOOST AZ0X_GPU_BOOST_PLAIN AZ0X_GPU_BOOST_HZ AZ0X_GPU_BOOST_UV AZ0X_GPU_BOOST_LIMIT_MC"
 do_compile[postfuncs] += "${@'az0x_gpu_boost_dtbs' if d.getVar('AZ0X_GPU_BOOST') == '1' else ''}"
 
-# make treats an existing .dtb as up to date, so a tree boosted by an earlier
-# build would survive switching the boost off. Remove the board trees before
-# every compile so they are always rebuilt from source.
-do_compile[prefuncs] += "az0x_gpu_boost_fresh_dtbs"
-python az0x_gpu_boost_fresh_dtbs() {
-    import os
-    dtsdir = os.path.join(d.getVar('B'), 'arch', d.getVar('ARCH'), 'boot', 'dts', 'rockchip')
-    for board in (d.getVar('AZ0X_BOARD_DTBS') or '').split():
-        dtb = os.path.join(dtsdir, board + '.dtb')
-        if os.path.exists(dtb):
-            os.remove(dtb)
-}
-
 python az0x_gpu_boost_dtbs() {
     import os, re, subprocess
 

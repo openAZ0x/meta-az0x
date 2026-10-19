@@ -84,4 +84,9 @@ AZ0X_BOARD_DTBS ?= "${AZ0X_BOARD_DTB}"
 # recipes-kernel/linux/az01-gpu-boost.inc for the reasoning and the values.
 AZ0X_GPU_BOOST ?= "0"
 AZ0X_GPU_BOOST_PLAIN ?= "0"
+# Opt-in: AZ0X_CPU_BOOST = "1" adds the -c trees' 1704 and 1800 MHz CPU steps,
+# with a throttle back to 1608 MHz under heat, to the plain RK3288 trees,
+# beyond Rockchip's 1.6 GHz rating. Independent of the GPU boost. See
+# recipes-kernel/linux/az01-cpu-boost.inc.
+AZ0X_CPU_BOOST ?= "0"
 KERNEL_DEVICETREE:az01-ksrc = "${@' '.join('rockchip/%s.dtb' % b for b in d.getVar('AZ0X_BOARD_DTBS').split())}"
