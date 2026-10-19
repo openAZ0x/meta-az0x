@@ -20,7 +20,8 @@ SRC_URI:append:az01 = " file://az01-rt.cfg"
 # do_kernel_metadata fails with "Feature ... not found". Pull the same kmeta in
 # so both providers configure identically. The directory is located through
 # BBPATH (every layer appends its LAYERDIR) rather than a hard-coded layer path;
-# meta-rockchip is a LAYERDEPENDS of this layer, so it is always present.
-AZ0X_ROCKCHIP_KMETA_DIR := "${@os.path.dirname(bb.utils.which(d.getVar('BBPATH'), 'recipes-kernel/linux/linux-yocto/rockchip-kmeta') or '')}"
+# meta-rockchip is a LAYERDEPENDS of this layer, so it is always present. It
+# keeps the kmeta in linux-rockchip/ since wrynose, linux-yocto/ before.
+AZ0X_ROCKCHIP_KMETA_DIR := "${@os.path.dirname(bb.utils.which(d.getVar('BBPATH'), 'recipes-kernel/linux/linux-rockchip/rockchip-kmeta') or bb.utils.which(d.getVar('BBPATH'), 'recipes-kernel/linux/linux-yocto/rockchip-kmeta') or '')}"
 FILESEXTRAPATHS:prepend:rockchip := "${AZ0X_ROCKCHIP_KMETA_DIR}:"
 SRC_URI:append:rockchip = " file://rockchip-kmeta;type=kmeta;name=rockchip-kmeta;destsuffix=rockchip-kmeta"
